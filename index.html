@@ -12,93 +12,90 @@
             background: #34495e;
             max-width: 500px;
             margin: 20px auto;
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 10px solid #f1c40f;
-            min-height: 50px;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #f1c40f;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            min-height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
+            line-height: 1.4;
         }
 
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 20px auto; padding: 10px; background: #34495e; border-radius: 10px; }
-        .cell { aspect-ratio: 1/1; background: #ecf0f1; color: #2c3e50; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; border-radius: 5px; cursor: pointer; padding: 5px; transition: 0.3s; border: 2px solid transparent; }
-        .cell:hover { background: #bdc3c7; border-color: #f1c40f; }
-        .cell.marked { background: #27ae60; color: white; transform: scale(0.95); box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+        .cell { aspect-ratio: 1/1; background: #ecf0f1; color: #2c3e50; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; border-radius: 5px; cursor: pointer; padding: 5px; transition: 0.2s; }
+        .cell:hover { background: #bdc3c7; }
+        .cell.marked { background: #27ae60; color: white; transform: scale(0.95); }
         .free { background: #e74c3c !important; color: white !important; }
         
         .controls { margin-top: 20px; }
-        button { padding: 12px 24px; font-size: 1rem; cursor: pointer; background: #f1c40f; border: none; border-radius: 5px; font-weight: bold; margin: 5px; transition: 0.2s; }
-        button:hover { background: #d4ac0d; transform: translateY(-2px); }
-        .btn-reset { background: #95a5a6; }
+        button { padding: 15px 30px; font-size: 1.1rem; cursor: pointer; background: #f1c40f; border: none; border-radius: 8px; font-weight: bold; margin: 10px; box-shadow: 0 4px #d4ac0d; }
+        button:active { box-shadow: 0 2px #d4ac0d; transform: translateY(2px); }
+        .btn-reset { background: #95a5a6; box-shadow: 0 4px #7f8c8d; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <h1>TEK 8.6 BINGO</h1>
-    <p>Draw a question, solve it, then find the answer below!</p>
+    <p>Click the button to generate a random science problem!</p>
 
-    <div id="question-area">Click "Draw Question" to begin!</div>
+    <div id="question-area">Ready to start?</div>
 
     <div class="controls">
-        <button onclick="drawQuestion()">Draw Question</button>
-        <button class="btn-reset" onclick="generateBoard()">Reset Board</button>
+        <button onclick="drawQuestion()">NEXT QUESTION ➔</button>
+        <br>
+        <button class="btn-reset" onclick="generateBoard()">New Random Board</button>
     </div>
 
     <div class="grid" id="bingo-board"></div>
 
     <script>
-        // Maps the answers to specific Grade 8 Science questions
         const questionBank = [
             { a: "10g", q: "Mass of product if 5g Reactant A + 5g Reactant B react in a closed system?" },
             { a: "15g", q: "If you start with 15g of ice, what is the mass of the water after it melts?" },
             { a: "50g", q: "If the products weigh 50g, what was the total mass of the reactants?" },
             { a: "100g", q: "Total mass of a 75g solution mixed with 25g of solvent?" },
-            { a: "22g", q: "Mass of CO2 produced if 12g of Carbon reacts with 10g of Oxygen?" },
-            { a: "5g", q: "If 10g of wood burns and 5g of gas escapes, how much ash is left?" },
-            { a: "8g", q: "If you have 10g of reactants and 2g of product, how much gas escaped?" },
-            { a: "25g", q: "The missing mass in: ?g Iron + 10g Oxygen = 35g Rust." },
-            { a: "2 atoms", q: "Number of Oxygen atoms in one molecule of CO2?" },
-            { a: "4 atoms", q: "Total atoms on the reactant side of: 2H2 + O2?" },
+            { a: "22g", q: "Mass of CO2 produced if 12g Carbon + 10g Oxygen react?" },
+            { a: "5g", q: "If 10g wood burns and 5g gas escapes, what is the mass of the ash?" },
+            { a: "8g", q: "In an open system: 10g reactants result in 2g solid. How much gas escaped?" },
+            { a: "25g", q: "Find X: X grams Iron + 10g Oxygen = 35g Rust." },
+            { a: "2 atoms", q: "Number of Oxygen atoms in CO2?" },
+            { a: "4 atoms", q: "Total atoms on the reactant side of 2H2 + O2?" },
             { a: "6 atoms", q: "Total Hydrogen atoms in 3H2?" },
             { a: "12 atoms", q: "Number of Hydrogen atoms in Glucose (C6H12O6)?" },
             { a: "16 atoms", q: "Total atoms in two molecules of C2H6?" },
-            { a: "Balanced", q: "Status of an equation where Left Side atoms = Right Side atoms." },
-            { a: "Unbalanced", q: "If mass seems to be 'created' in an equation, it is..." },
-            { a: "Reactant", q: "The substances you start with (left side of the arrow)." },
-            { a: "Product", q: "The new substances formed (right side of the arrow)." },
-            { a: "Yields", q: "What the arrow (→) represents in a chemical equation." },
-            { a: "Subscript", q: "The small number that tells you the number of atoms." },
-            { a: "Coefficient", q: "The big number in front that multiplies the whole molecule." },
-            { a: "Closed System", q: "A container where matter cannot enter or leave." },
-            { a: "Open System", q: "A container where gas can escape into the atmosphere." },
-            { a: "Gas Escaped", q: "Why a scale reading might drop during an open reaction." },
-            { a: "Law of Conservation", q: "The rule that mass is never created or destroyed." },
-            { a: "Matter", q: "Anything that has mass and takes up space." }
+            { a: "Balanced", q: "An equation where Left Side atoms = Right Side atoms is..." },
+            { a: "Unbalanced", q: "If an equation has more atoms on the right than the left, it is..." },
+            { a: "Reactant", q: "The 'ingredients' found on the left side of the arrow." },
+            { a: "Product", q: "The new substances formed on the right side of the arrow." },
+            { a: "Yields", q: "What the chemical arrow (→) means." },
+            { a: "Subscript", q: "The tiny number used to show the number of atoms." },
+            { a: "Coefficient", q: "The large number in front that multiplies the whole formula." },
+            { a: "Closed System", q: "A reaction where matter cannot escape." },
+            { a: "Open System", q: "A reaction where gas can float away into the room." },
+            { a: "Gas Escaped", q: "Reason for mass loss in an open beaker." },
+            { a: "Law of Conservation", q: "Rule: Mass is never created or destroyed." },
+            { a: "Matter", q: "Anything that has mass and volume." }
         ];
 
         function generateBoard() {
             const board = document.getElementById('bingo-board');
             board.innerHTML = '';
-            
-            // Extract just the answers for the board
             let answersOnly = questionBank.map(item => item.a);
             let shuffled = answersOnly.sort(() => 0.5 - Math.random());
             
             for (let i = 0; i < 25; i++) {
                 let cell = document.createElement('div');
                 cell.className = 'cell';
-                
                 if (i === 12) {
                     cell.innerText = "FREE SPACE";
                     cell.classList.add('free', 'marked');
                 } else {
                     cell.innerText = shuffled[i];
-                    cell.onclick = function() {
-                        this.classList.toggle('marked');
-                    };
+                    cell.onclick = function() { this.classList.toggle('marked'); };
                 }
                 board.appendChild(cell);
             }
