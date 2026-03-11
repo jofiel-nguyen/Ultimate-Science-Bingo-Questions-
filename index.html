@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEK 8.6 Bingo Master</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: white; text-align: center; margin: 0; padding: 20px; }
+        .game-container { max-width: 600px; margin: auto; background: #1e1e1e; padding: 20px; border-radius: 15px; border: 2px solid #3498db; }
+        h1 { color: #3498db; margin-top: 0; }
+        #question-display { background: #2c3e50; padding: 15px; border-radius: 10px; margin-bottom: 20px; min-height: 60px; border-left: 5px solid #f1c40f; font-style: italic; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
+        .cell { aspect-ratio: 1/1; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; border-radius: 5px; cursor: pointer; transition: 0.2s; padding: 4px; }
+        .cell:hover { background: #5d6d7e; }
+        .cell.marked { background: #27ae60; font-weight: bold; box-shadow: inset 0 0 10px #000; }
+        .free { background: #e74c3c !important; }
+        .btn { padding: 12px 25px; font-size: 1rem; cursor: pointer; border: none; border-radius: 5px; font-weight: bold; margin: 5px; }
+        .draw-btn { background: #f1c40f; color: black; }
+        .reset-btn { background: #95a5a6; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <h1>TEK 8.6 Bingo</h1>
+    
+    <div id="question-display">Click "Draw Question" to start!</div>
+
+    <div class="grid" id="board"></div>
+
+    <button class="btn draw-btn" onclick="drawQuestion()">Draw Question</button>
+    <button class="btn reset-btn" onclick="generateBoard()">New Board</button>
+</div>
+
+<script>
+    const data = [
+        { q: "You mix 5g of A and 5g of B in a sealed jar. Total mass?", a: "10g" },
+        { q: "Starting substances on the left of an equation.", a: "Reactant" },
+        { q: "The ending substances on the right side.", a: "Product" },
+        { q: "The 'big' number in front of a formula.", a: "Coefficient" },
+        { q: "The 'small' number that shows atom count.", a: "Subscript" },
+        { q: "Total H atoms in 3H2O?", a: "6 atoms" },
+        { q: "A system where no matter can escape.", a: "Closed System" },
+        { q: "A system where gas can float away.", a: "Open System" },
+        { q: "What happened if mass decreased in an open beaker?", a: "Gas Escaped" },
+        { q: "The arrow in an equation means...", a: "Yields" },
+        { q: "If atoms on left = atoms on right, the equation is...", a: "Balanced" },
+        { q: "Rule: Matter is never created or destroyed.", a: "Law of Conservation" },
+        { q: "Total atoms on the left must equal total atoms on the...", a: "Right Side" },
+        { q: "Everything in the universe is made of...", a: "Matter" },
+        { q: "Reaction: 20g + 5g -> ?", a: "25g" },
+        { q: "Total O atoms in 2O2?", a: "4 atoms" },
+        { q: "Total atoms in CH4?", a: "5 atoms" },
+        { q: "Total atoms in 2CH4?", a: "10 atoms" }
+    ];
+
+    function generateBoard() {
+        const board = document.getElementById('board');
+        board.innerHTML = '';
+        let allAnswers = data.map(item => item.a);
+        // Fill remaining spots if needed
+        while(allAnswers.length < 24) allAnswers.push("N/A");
+        
+        let shuffled = allAnswers.sort(() => 0.5 - Math.random());
+        
+        for (let i = 0; i < 25; i++) {
+            let cell = document.createElement('div');
+            cell.className = 'cell';
+            if (i === 12) {
+                cell.innerText = "FREE";
+                cell.classList.add('free', 'marked');
+            } else {
+                cell.innerText = shuffled.pop();
+                cell.onclick = function() { this.classList.toggle('marked'); };
+            }
+            board.appendChild(cell);
+        }
+    }
+
+    function drawQuestion() {
+        const randomItem = data[Math.floor(Math.random() * data.length)];
+        document.getElementById('question-display').innerText = randomItem.q;
+    }
+
+    generateBoard();
+</script>
+
+</body>
+</html>
