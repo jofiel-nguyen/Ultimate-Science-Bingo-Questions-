@@ -6,7 +6,7 @@ A fast-paced, interactive web-based Bingo game designed for middle school scienc
 ![Platform: GitHub Pages](https://img.shields.io/badge/Platform-GitHub%20Pages-blue)
 
 ## 🚀 Live Demo
-[View the Live Game Here](INSERT_YOUR_GITHUB_PAGES_LINK_HERE)
+[View the Live Game Here](https://jofiel-nguyen.github.io/Ultimate-Science-Bingo-Questions-/)
 
 ## ✨ Features
 - **Dynamic Board Generation**: Every student gets a unique, randomized Bingo board.
