@@ -1,20 +1,4 @@
-// 1. YOUR FIREBASE CONFIGURATION
-// You get this from: Firebase Console > Project Settings > General > Your Apps (Web)
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-
-// 2. GAME VARIABLES
+// 1. CORE VARIABLES
 const questionBank = [
     { a: "10g", q: "Mass of product if 5g Reactant A + 5g Reactant B react in a closed system?" },
     { a: "15g", q: "If you start with 15g of ice, what is the mass of the water after it melts?" },
@@ -49,20 +33,9 @@ let gameActive = false;
 let currentAnswer = "";
 let playerName = "";
 
-// Initial load of the global leaderboard
+// Load local scores (Only visible on this specific computer)
 displayLeaderboard();
 
-// 3. ADMIN SHORTCUT (Ctrl+Shift+Alt+C)
-window.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && e.shiftKey && e.altKey && e.code === 'KeyC') {
-        const clearBtn = document.getElementById('admin-clear-btn');
-        if (clearBtn) {
-            clearBtn.style.display = (clearBtn.style.display === "none") ? "inline-block" : "none";
-        }
-    }
-});
-
-// 4. CORE GAME FUNCTIONS
 function startTimer() {
     clearInterval(timerInterval);
     timeLeft = 300;
@@ -143,36 +116,26 @@ function gameWin() {
     clearInterval(timerInterval);
     gameActive = false;
     const timeSpent = 300 - timeLeft;
+    
+    // Save to local storage
     saveScore(playerName, timeSpent);
-    setTimeout(() => alert(`BINGO! ${playerName}, your score was sent!`), 100);
+    displayLeaderboard();
+    
+    // Visual Alert
+    alert(`🏆 BINGO! \nName: ${playerName} \nTime: ${timeSpent} seconds \n\nShow this screen to your teacher!`);
 }
 
-// 5. GLOBAL DATABASE FUNCTIONS
 function saveScore(name, time) {
-    database.ref('scores').push({
-        name: name,
-        time: time
-    });
+    let scores = JSON.parse(localStorage.getItem('bingoScores')) || [];
+    scores.push({ name, time });
+    scores.sort((a, b) => a.time - b.time);
+    localStorage.setItem('bingoScores', JSON.stringify(scores.slice(0, 5)));
 }
 
 function displayLeaderboard() {
-    // Listen for changes and show the Top 5 fastest times
-    database.ref('scores').orderByChild('time').limitToFirst(5).on('value', (snapshot) => {
-        const list = document.getElementById('score-list');
-        list.innerHTML = "";
-        let i = 1;
-        snapshot.forEach((child) => {
-            const data = child.val();
-            list.innerHTML += `<li><span>${i}. ${data.name}</span> <span>${data.time}s</span></li>`;
-            i++;
-        });
-    });
-}
-
-function clearScores() {
-    if(confirm("Clear Global High Scores?")) {
-        database.ref('scores').remove();
-    }
+    const scores = JSON.parse(localStorage.getItem('bingoScores')) || [];
+    const list = document.getElementById('score-list');
+    list.innerHTML = scores.map((s, i) => `<li><span>${i+1}. ${s.name}</span> <span>${s.time}s</span></li>`).join('');
 }
 
 function resetGame() {
@@ -185,4 +148,9 @@ function resetGame() {
     generateBoard();
     startTimer();
     drawQuestion();
+}
+
+function clearScores() {
+    localStorage.removeItem('bingoScores');
+    displayLeaderboard();
 }
