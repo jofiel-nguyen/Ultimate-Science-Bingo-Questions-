@@ -35,6 +35,17 @@ let playerName = "";
 // Initial leaderboard load
 displayLeaderboard();
 
+// --- ADMIN SHORTCUT LOGIC ---
+// Press Ctrl + Shift + Alt + C to reveal/hide the clear button
+window.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && e.altKey && e.code === 'KeyC') {
+        const clearBtn = document.getElementById('admin-clear-btn');
+        if (clearBtn) {
+            clearBtn.style.display = (clearBtn.style.display === "none") ? "inline-block" : "none";
+        }
+    }
+});
+
 function startTimer() {
     clearInterval(timerInterval);
     timeLeft = 300;
@@ -136,8 +147,10 @@ function displayLeaderboard() {
 }
 
 function clearScores() {
-    localStorage.removeItem('bingoScores');
-    displayLeaderboard();
+    if(confirm("Are you sure you want to delete all high scores?")) {
+        localStorage.removeItem('bingoScores');
+        displayLeaderboard();
+    }
 }
 
 function resetGame() {
