@@ -1,81 +1,120 @@
 body{
-font-family:Arial;
-background:#2c3e50;
-color:white;
+font-family:'Fredoka', sans-serif;
+background:linear-gradient(135deg,#a8e6ff,#ffd6f6);
+color:#333;
 text-align:center;
 padding:20px;
 }
 
+/* Title */
+
 h1{
-color:#f1c40f;
+color:#ff6b81;
+font-size:3rem;
+text-shadow:2px 2px #ffffff;
 }
+
+/* Timer */
 
 #timer{
-font-size:1.5rem;
+font-size:1.6rem;
 font-weight:bold;
-background:white;
-color:#e74c3c;
+background:#fff6a3;
+color:#ff4757;
 display:inline-block;
-padding:10px 20px;
-border-radius:10px;
+padding:12px 25px;
+border-radius:20px;
 margin:15px;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
 
+/* Question box */
+
 #question-area{
-background:#34495e;
-padding:20px;
-border-radius:10px;
-max-width:500px;
+background:#ffffff;
+padding:25px;
+border-radius:20px;
+max-width:520px;
 margin:auto;
 margin-bottom:20px;
+box-shadow:0 6px 12px rgba(0,0,0,0.15);
+font-size:1.2rem;
 }
+
+/* Bingo grid */
 
 .grid{
 display:grid;
 grid-template-columns:repeat(5,1fr);
-gap:10px;
-max-width:500px;
+gap:12px;
+max-width:520px;
 margin:auto;
 }
 
+/* Bingo cells */
+
 .cell{
-background:#ecf0f1;
-color:#2c3e50;
+background:#ffffff;
+color:#444;
 aspect-ratio:1;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:0.8rem;
+font-size:0.85rem;
 font-weight:bold;
-border-radius:6px;
+border-radius:15px;
 cursor:pointer;
-padding:5px;
+padding:6px;
+transition:0.2s;
+box-shadow:0 4px 8px rgba(0,0,0,0.15);
 }
+
+.cell:hover{
+transform:scale(1.08);
+background:#ffeaa7;
+}
+
+/* Marked correct */
 
 .cell.marked{
-background:#27ae60;
+background:#2ed573;
 color:white;
-cursor:default;
+transform:scale(0.95);
 }
+
+/* Free space */
 
 .free{
-background:#e74c3c;
+background:#ff7675;
 color:white;
+font-size:1rem;
 }
 
+/* Buttons */
+
 button{
-padding:12px 25px;
-font-size:1rem;
+padding:14px 28px;
+font-size:1.1rem;
 border:none;
-border-radius:8px;
+border-radius:30px;
 cursor:pointer;
-background:#f1c40f;
+background:linear-gradient(135deg,#ff9ff3,#feca57);
+color:#333;
+font-weight:bold;
 margin-top:10px;
+box-shadow:0 5px 10px rgba(0,0,0,0.2);
+transition:0.2s;
 }
+
+button:hover{
+transform:scale(1.08);
+}
+
+/* Shake animation */
 
 .shake{
 animation:shake 0.4s;
-background:#e74c3c;
+background:#ff6b81;
 color:white;
 }
 
@@ -86,17 +125,21 @@ color:white;
 100%{transform:translateX(0);}
 }
 
+/* Leaderboard */
+
 #leaderboard{
 margin-top:40px;
-max-width:400px;
+max-width:420px;
 margin-left:auto;
 margin-right:auto;
-background:rgba(0,0,0,0.3);
+background:white;
 padding:20px;
-border-radius:12px;
+border-radius:20px;
+box-shadow:0 6px 12px rgba(0,0,0,0.15);
 }
 
 li{
 list-style:none;
-padding:6px;
+padding:8px;
+font-weight:bold;
 }
