@@ -4,190 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEK 8.6 Science Bingo</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #2c3e50; color: white; text-align: center; padding: 20px; }
-        h1 { color: #f1c40f; text-shadow: 2px 2px #c0392b; margin-bottom: 5px;}
-        
-        #timer { font-size: 1.5rem; font-weight: bold; color: #e74c3c; background: #ecf0f1; display: inline-block; padding: 10px 20px; border-radius: 8px; margin: 10px; }
-
-        #question-area {
-            background: #34495e;
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 25px;
-            border-radius: 12px;
-            border: 2px solid #f1c40f;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            min-height: 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 20px auto; padding: 10px; background: #34495e; border-radius: 10px; }
-        .cell { aspect-ratio: 1/1; background: #ecf0f1; color: #2c3e50; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; border-radius: 5px; cursor: pointer; padding: 5px; transition: 0.2s; }
-        
-        /* Correct Answer Styling */
-        .cell.marked { background: #27ae60 !important; color: white !important; transform: scale(0.95); cursor: default; }
-        .free { background: #e74c3c !important; color: white !important; }
-        
-        /* Wrong Answer Animation */
-        .shake { animation: shake 0.4s; background: #e74c3c; color: white; }
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
-
-        .controls { margin-top: 20px; }
-        button { padding: 15px 30px; font-size: 1.1rem; cursor: pointer; background: #f1c40f; border: none; border-radius: 8px; font-weight: bold; margin: 10px; box-shadow: 0 4px #d4ac0d; }
-        button:active { box-shadow: 0 2px #d4ac0d; transform: translateY(2px); }
-        .btn-reset { background: #95a5a6; box-shadow: 0 4px #7f8c8d; font-size: 0.9rem; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <h1>TEK 8.6 BINGO</h1>
+
+    <div id="setup-area">
+        <input type="text" id="player-name" placeholder="Enter Your Name">
+        <button id="start-btn" onclick="resetGame()">START GAME</button>
+    </div>
+
     <div id="timer">Time Remaining: 05:00</div>
     
     <div id="question-area">
-        <span id="q-text">Click "START GAME" to begin!</span>
+        <span id="q-text">Enter your name and click START!</span>
     </div>
 
     <div class="controls">
         <button id="draw-btn" onclick="drawQuestion()" style="display:none;">NEXT QUESTION ➔</button>
-        <button id="start-btn" onclick="resetGame()">START GAME</button>
     </div>
 
     <div class="grid" id="bingo-board"></div>
 
-    <script>
-        const questionBank = [
-            { a: "10g", q: "Mass of product if 5g Reactant A + 5g Reactant B react in a closed system?" },
-            { a: "15g", q: "If you start with 15g of ice, what is the mass of the water after it melts?" },
-            { a: "50g", q: "If the products weigh 50g, what was the total mass of the reactants?" },
-            { a: "100g", q: "Total mass of a 75g solution mixed with 25g of solvent?" },
-            { a: "22g", q: "Mass of CO2 produced if 12g Carbon + 10g Oxygen react?" },
-            { a: "5g", q: "If 10g wood burns and 5g gas escapes, what is the mass of the ash?" },
-            { a: "8g", q: "In an open system: 10g reactants result in 2g solid. How much gas escaped?" },
-            { a: "25g", q: "Find X: X grams Iron + 10g Oxygen = 35g Rust." },
-            { a: "2 atoms", q: "Number of Oxygen atoms in CO2?" },
-            { a: "4 atoms", q: "Total atoms on the reactant side of 2H2 + O2?" },
-            { a: "6 atoms", q: "Total Hydrogen atoms in 3H2?" },
-            { a: "12 atoms", q: "Number of Hydrogen atoms in Glucose (C6H12O6)?" },
-            { a: "16 atoms", q: "Total atoms in two molecules of C2H6?" },
-            { a: "Balanced", q: "An equation where Left Side atoms = Right Side atoms is..." },
-            { a: "Unbalanced", q: "If an equation has more atoms on the right than the left, it is..." },
-            { a: "Reactant", q: "The 'ingredients' found on the left side of the arrow." },
-            { a: "Product", q: "The new substances formed on the right side of the arrow." },
-            { a: "Yields", q: "What the chemical arrow (→) means." },
-            { a: "Subscript", q: "The tiny number used to show the number of atoms." },
-            { a: "Coefficient", q: "The large number in front that multiplies the whole formula." },
-            { a: "Closed System", q: "A reaction where matter cannot escape." },
-            { a: "Open System", q: "A reaction where gas can float away into the room." },
-            { a: "Gas Escaped", q: "Reason for mass loss in an open beaker." },
-            { a: "Law of Conservation", q: "Rule: Mass is never created or destroyed." },
-            { a: "Matter", q: "Anything that has mass and volume." }
-        ];
+    <div id="leaderboard">
+        <h3>🏆 Hall of Fame (Top 5)</h3>
+        <ul id="score-list"></ul>
+        <button class="btn-reset" onclick="clearScores()">Clear Scores</button>
+    </div>
 
-        let timeLeft = 300;
-        let timerInterval;
-        let gameActive = false;
-        let currentAnswer = "";
-
-        function startTimer() {
-            clearInterval(timerInterval);
-            timeLeft = 300;
-            timerInterval = setInterval(() => {
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    gameActive = false;
-                    alert("Time's up! You didn't finish in time.");
-                } else {
-                    timeLeft--;
-                    let mins = Math.floor(timeLeft / 60);
-                    let secs = timeLeft % 60;
-                    document.getElementById('timer').innerText = `Time Remaining: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-                }
-            }, 1000);
-        }
-
-        function generateBoard() {
-            const board = document.getElementById('bingo-board');
-            board.innerHTML = '';
-            let answersOnly = questionBank.map(item => item.a);
-            let shuffled = answersOnly.sort(() => 0.5 - Math.random());
-            
-            for (let i = 0; i < 25; i++) {
-                let cell = document.createElement('div');
-                cell.className = 'cell';
-                if (i === 12) {
-                    cell.innerText = "FREE SPACE";
-                    cell.classList.add('free', 'marked');
-                } else {
-                    cell.innerText = shuffled[i];
-                    cell.onclick = function() { handleCellClick(this); };
-                }
-                board.appendChild(cell);
-            }
-        }
-
-        function handleCellClick(cellElement) {
-            if (!gameActive || cellElement.classList.contains('marked')) return;
-
-            // Check if the clicked cell's text matches the current question's answer
-            if (cellElement.innerText === currentAnswer) {
-                cellElement.classList.add('marked');
-                checkWin();
-                drawQuestion(); // Automatically move to next question if they get it right
-            } else {
-                // Wrong answer feedback
-                cellElement.classList.add('shake');
-                setTimeout(() => cellElement.classList.remove('shake'), 400);
-            }
-        }
-
-        function drawQuestion() {
-            if(!gameActive) return;
-            const randomIndex = Math.floor(Math.random() * questionBank.length);
-            const questionObj = questionBank[randomIndex];
-            
-            currentAnswer = questionObj.a;
-            document.getElementById('q-text').innerText = questionObj.q;
-        }
-
-        function checkWin() {
-            const cells = document.querySelectorAll('.cell');
-            const marked = Array.from(cells).map(c => c.classList.contains('marked'));
-            const winPatterns = [
-                [0,1,2,3,4], [5,6,7,8,9], [10,11,12,13,14], [15,16,17,18,19], [20,21,22,23,24], // Rows
-                [0,5,10,15,20], [1,6,11,16,21], [2,7,12,17,22], [3,8,13,18,23], [4,9,14,19,24], // Cols
-                [0,6,12,18,24], [4,8,12,16,20] // Diagonals
-            ];
-
-            for (let pattern of winPatterns) {
-                if (pattern.every(index => marked[index])) {
-                    clearInterval(timerInterval);
-                    gameActive = false;
-                    setTimeout(() => alert("BINGO! You solved the science puzzles in time! 🎉"), 100);
-                    return;
-                }
-            }
-        }
-
-        function resetGame() {
-            gameActive = true;
-            document.getElementById('start-btn').innerText = "Restart Game";
-            document.getElementById('draw-btn').style.display = "inline-block";
-            generateBoard();
-            startTimer();
-            drawQuestion();
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
