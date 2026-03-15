@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEK 8.6 Science Bingo</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEK 8.6 Science Bingo</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <h1>TEK 8.6 BINGO</h1>
+<h1>TEK 8.6 BINGO</h1>
 
-    <div id="setup-area">
-        <input type="text" id="player-name" placeholder="Enter Your Name">
-        <button id="start-btn" onclick="resetGame()">START GAME</button>
-    </div>
+<div id="setup-area">
+    <input type="text" id="player-name" placeholder="Enter Your Name">
+    <button onclick="resetGame()">START GAME</button>
+</div>
 
-    <div id="timer">Time Remaining: 05:00</div>
-    
-    <div id="question-area">
-        <span id="q-text">Enter your name and click START!</span>
-    </div>
+<div id="timer">Time Remaining: 05:00</div>
 
-    <div class="controls">
-        <button id="draw-btn" onclick="drawQuestion()" style="display:none;">NEXT QUESTION ➔</button>
-    </div>
+<div id="question-area">
+    <span id="q-text">Enter your name and click START!</span>
+</div>
 
-    <div class="grid" id="bingo-board"></div>
+<div class="controls">
+    <button id="draw-btn" onclick="drawQuestion()" style="display:none;">NEXT QUESTION ➜</button>
+</div>
+
+<div class="grid" id="bingo-board"></div>
 
 <div id="leaderboard">
-    <h3>🏆 Total Scores:</h3>
+    <h3>🏆 Total Scores</h3>
     <ul id="score-list"></ul>
-    <button id="admin-clear-btn" class="btn-reset" onclick="clearScores()" style="display: none;">Clear Scores</button>
+    <button onclick="clearScores()">Clear Scores</button>
 </div>
-    <script src="script.js"></script>
+
+<script src="javascript.js"></script>
 </body>
 </html>
