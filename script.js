@@ -1,3 +1,20 @@
+// 1. YOUR FIREBASE CONFIGURATION
+// You get this from: Firebase Console > Project Settings > General > Your Apps (Web)
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// 2. GAME VARIABLES
 const questionBank = [
     { a: "10g", q: "Mass of product if 5g Reactant A + 5g Reactant B react in a closed system?" },
     { a: "15g", q: "If you start with 15g of ice, what is the mass of the water after it melts?" },
@@ -32,11 +49,10 @@ let gameActive = false;
 let currentAnswer = "";
 let playerName = "";
 
-// Initial leaderboard load
+// Initial load of the global leaderboard
 displayLeaderboard();
 
-// --- ADMIN SHORTCUT LOGIC ---
-// Press Ctrl + Shift + Alt + C to reveal/hide the clear button
+// 3. ADMIN SHORTCUT (Ctrl+Shift+Alt+C)
 window.addEventListener('keydown', function(e) {
     if (e.ctrlKey && e.shiftKey && e.altKey && e.code === 'KeyC') {
         const clearBtn = document.getElementById('admin-clear-btn');
@@ -46,6 +62,7 @@ window.addEventListener('keydown', function(e) {
     }
 });
 
+// 4. CORE GAME FUNCTIONS
 function startTimer() {
     clearInterval(timerInterval);
     timeLeft = 300;
@@ -53,7 +70,7 @@ function startTimer() {
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             gameActive = false;
-            alert("Time's up! Try again.");
+            alert("Time's up!");
         } else {
             timeLeft--;
             updateTimerDisplay();
@@ -89,7 +106,6 @@ function generateBoard() {
 
 function handleCellClick(cellElement) {
     if (!gameActive || cellElement.classList.contains('marked')) return;
-
     if (cellElement.innerText === currentAnswer) {
         cellElement.classList.add('marked');
         checkWin();
@@ -115,7 +131,6 @@ function checkWin() {
         [0,5,10,15,20], [1,6,11,16,21], [2,7,12,17,22], [3,8,13,18,23], [4,9,14,19,24],
         [0,6,12,18,24], [4,8,12,16,20]
     ];
-
     for (let pattern of winPatterns) {
         if (pattern.every(index => marked[index])) {
             gameWin();
@@ -129,34 +144,40 @@ function gameWin() {
     gameActive = false;
     const timeSpent = 300 - timeLeft;
     saveScore(playerName, timeSpent);
-    displayLeaderboard();
-    setTimeout(() => alert(`BINGO! ${playerName}, you won in ${timeSpent} seconds!`), 100);
+    setTimeout(() => alert(`BINGO! ${playerName}, your score was sent!`), 100);
 }
 
+// 5. GLOBAL DATABASE FUNCTIONS
 function saveScore(name, time) {
-    let scores = JSON.parse(localStorage.getItem('bingoScores')) || [];
-    scores.push({ name, time });
-    scores.sort((a, b) => a.time - b.time);
-    localStorage.setItem('bingoScores', JSON.stringify(scores.slice(0, 5)));
+    database.ref('scores').push({
+        name: name,
+        time: time
+    });
 }
 
 function displayLeaderboard() {
-    const scores = JSON.parse(localStorage.getItem('bingoScores')) || [];
-    const list = document.getElementById('score-list');
-    list.innerHTML = scores.map((s, i) => `<li><span>${i+1}. ${s.name}</span> <span>${s.time}s</span></li>`).join('');
+    // Listen for changes and show the Top 5 fastest times
+    database.ref('scores').orderByChild('time').limitToFirst(5).on('value', (snapshot) => {
+        const list = document.getElementById('score-list');
+        list.innerHTML = "";
+        let i = 1;
+        snapshot.forEach((child) => {
+            const data = child.val();
+            list.innerHTML += `<li><span>${i}. ${data.name}</span> <span>${data.time}s</span></li>`;
+            i++;
+        });
+    });
 }
 
 function clearScores() {
-    if(confirm("Are you sure you want to delete all high scores?")) {
-        localStorage.removeItem('bingoScores');
-        displayLeaderboard();
+    if(confirm("Clear Global High Scores?")) {
+        database.ref('scores').remove();
     }
 }
 
 function resetGame() {
     const input = document.getElementById('player-name');
     if (!input.value.trim()) return alert("Enter your name!");
-    
     playerName = input.value;
     input.disabled = true;
     gameActive = true;
