@@ -101,14 +101,22 @@ button:active { transform: translateY(2px); box-shadow: 0 2px #d4ac0d; }
     border-radius: 15px;
 }
 
-#score-list { list-style: none; padding: 0; text-align: left; }
-#score-list li {
-    background: #34495e;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
+#score-list li:nth-child(1) { 
+    border-left: 5px solid #f1c40f; /* Gold */
+    background: rgba(241, 196, 15, 0.1);
+    font-size: 1.2rem;
 }
 
-.btn-reset { background: #95a5a6; font-size: 0.8rem; padding: 5px 10px; margin-top: 10px; box-shadow: 0 2px #7f8c8d; }
+#score-list li:nth-child(2) { 
+    border-left: 5px solid #bdc3c7; /* Silver */
+    background: rgba(189, 195, 199, 0.1);
+}
+
+#score-list li:nth-child(3) { 
+    border-left: 5px solid #cd7f32; /* Bronze */
+    background: rgba(205, 127, 50, 0.1);
+}
+
+#score-list li span:first-child {
+    font-weight: bold;
+}g: 5px 10px; margin-top: 10px; box-shadow: 0 2px #7f8c8d; }
