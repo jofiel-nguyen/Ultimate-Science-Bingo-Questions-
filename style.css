@@ -1,145 +1,101 @@
-body{
-font-family:'Fredoka', sans-serif;
-background:linear-gradient(135deg,#a8e6ff,#ffd6f6);
-color:#333;
-text-align:center;
-padding:20px;
+body {
+    font-family: 'Fredoka', sans-serif;
+    background: linear-gradient(135deg, #a8e6ff, #ffd6f6);
+    color: #333;
+    text-align: center;
+    padding: 20px;
 }
 
-/* Title */
+h1 { color: #ff6b81; font-size: 3rem; text-shadow: 2px 2px #ffffff; }
 
-h1{
-color:#ff6b81;
-font-size:3rem;
-text-shadow:2px 2px #ffffff;
+#timer {
+    font-size: 1.6rem;
+    font-weight: bold;
+    background: #fff6a3;
+    color: #ff4757;
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 20px;
+    margin: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* Timer */
-
-#timer{
-font-size:1.6rem;
-font-weight:bold;
-background:#fff6a3;
-color:#ff4757;
-display:inline-block;
-padding:12px 25px;
-border-radius:20px;
-margin:15px;
-box-shadow:0 4px 10px rgba(0,0,0,0.2);
+#question-area {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 20px;
+    max-width: 520px;
+    margin: 20px auto;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    font-size: 1.3rem;
+    min-height: 60px;
 }
 
-/* Question box */
-
-#question-area{
-background:#ffffff;
-padding:25px;
-border-radius:20px;
-max-width:520px;
-margin:auto;
-margin-bottom:20px;
-box-shadow:0 6px 12px rgba(0,0,0,0.15);
-font-size:1.2rem;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    max-width: 520px;
+    margin: auto;
 }
 
-/* Bingo grid */
-
-.grid{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:12px;
-max-width:520px;
-margin:auto;
+.cell {
+    background: #ffffff;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    padding: 8px;
+    transition: 0.2s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-/* Bingo cells */
+.cell:hover { transform: scale(1.05); background: #ffeaa7; }
+.cell.marked { background: #2ed573; color: white; transform: scale(0.95); }
+.free { background: #ff7675; color: white; }
 
-.cell{
-background:#ffffff;
-color:#444;
-aspect-ratio:1;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:0.85rem;
-font-weight:bold;
-border-radius:15px;
-cursor:pointer;
-padding:6px;
-transition:0.2s;
-box-shadow:0 4px 8px rgba(0,0,0,0.15);
+sub { font-size: 0.6em; vertical-align: sub; }
+
+#leaderboard {
+    margin: 40px auto;
+    max-width: 450px;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
-.cell:hover{
-transform:scale(1.08);
-background:#ffeaa7;
+#score-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
 }
 
-/* Marked correct */
-
-.cell.marked{
-background:#2ed573;
-color:white;
-transform:scale(0.95);
+#score-table th {
+    border-bottom: 2px solid #ff6b81;
+    padding: 10px;
+    color: #ff6b81;
 }
 
-/* Free space */
-
-.free{
-background:#ff7675;
-color:white;
-font-size:1rem;
+#score-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
 }
 
-/* Buttons */
-
-button{
-padding:14px 28px;
-font-size:1.1rem;
-border:none;
-border-radius:30px;
-cursor:pointer;
-background:linear-gradient(135deg,#ff9ff3,#feca57);
-color:#333;
-font-weight:bold;
-margin-top:10px;
-box-shadow:0 5px 10px rgba(0,0,0,0.2);
-transition:0.2s;
+button {
+    padding: 14px 28px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #ff9ff3, #feca57);
+    font-weight: bold;
+    transition: 0.2s;
 }
 
-button:hover{
-transform:scale(1.08);
-}
-
-/* Shake animation */
-
-.shake{
-animation:shake 0.4s;
-background:#ff6b81;
-color:white;
-}
-
-@keyframes shake{
-0%{transform:translateX(0);}
-25%{transform:translateX(-5px);}
-75%{transform:translateX(5px);}
-100%{transform:translateX(0);}
-}
-
-/* Leaderboard */
-
-#leaderboard{
-margin-top:40px;
-max-width:420px;
-margin-left:auto;
-margin-right:auto;
-background:white;
-padding:20px;
-border-radius:20px;
-box-shadow:0 6px 12px rgba(0,0,0,0.15);
-}
-
-li{
-list-style:none;
-padding:8px;
-font-weight:bold;
-}
+.shake { animation: shake 0.4s; background: #ff6b81; color: white; }
+@keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
